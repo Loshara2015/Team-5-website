@@ -1,0 +1,27 @@
+{
+    "name": "nodelab2",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "roman",
+    "contributors": [],
+    "description": "",
+    "main": "Gruntfile.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "ejs": "^4.0.1",
+        "express": "^5.2.1"
+    }
+}
