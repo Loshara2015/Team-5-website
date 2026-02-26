@@ -1,29 +1,68 @@
-const express = require('express'); // Підключаємо фреймворк Express
+const express = require('express');
 const app = express();
-const port = 3000; // Наш сервер буде працювати на порту 3000
+const port = 3000;
 
-app.set('view engine', 'ejs');  // Налаштовуємо EJS як шаблонізатор для динамічних сторінок
+// Налаштування EJS
+app.set('view engine', 'ejs');
 
-app.use(express.static('public_html')); // Вказуємо папку 'public_html' як місце для статичних файлів
+// Папка 'public' для статичних файлів (CSS, JS, картинки)
+app.use(express.static('public'));
 
-// Маршрут для головної сторінки
+// БАЗА ДАНИХ
+const teamMembers = {
+    'kashyn': {
+        name: 'Кашин Олександр',
+        role: 'Виправляти те, що начудили😅',
+        age: 18,
+        hobby: 'Ігри, читання книжок, волейбол',
+        photo: '/img/kashyn.jpg'
+    },
+    'kolchin': {
+        name: 'Колчін Владислав',
+        role: 'Спостерігати, щоб ніхто нічого не начудив!👀',
+        age: 19,
+        hobby: 'Настільний теніс, музика, акваріумістика',
+        photo: '/img/kolchin.jpg'
+    },
+    'lukianchykova': {
+        name: 'Лук\'янчикова Анна',
+        role: '-',
+        age: 0,
+        hobby: '-',
+        photo: 'https://via.placeholder.com/300'
+    },
+    'ponomarenko': {
+        name: 'Пономаренко Анжеліка',
+        role: '-',
+        age: 0,
+        hobby: '–',
+        photo: 'https://via.placeholder.com/300' },
+    'romaniuk': {
+        name: 'Романюк Андрій',
+        role: '-',
+        age: 0,
+        hobby: '-',
+        photo: 'https://via.placeholder.com/300' }
+};
+
+// Статична сторінка
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public_html/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-// Маршрут для динамічної сторінки
-// За адресою '/student' будемо генерувати сторінку через EJS
-app.get('/student', (req, res) => {
-    const studentInfo = {      // Дані, які ми передамо з сервера прямо в HTML
-        name: 'Роман',
-        group: 'ІК-44', 
-        team: 'Бригада № 5'
-    };
-    
-    res.render('student', studentInfo);    // Рендеримо сторінку 'student.ejs' з папки views і передаємо їй дані
+// Динамічна сторінка EJS
+app.get('/member/:id', (req, res) => {
+    const memberId = req.params.id;
+    const member = teamMembers[memberId];
+
+    if (member) {
+        // Рендеринг шаблону і передача даних
+        res.render('member', { member: member });
+    } else {
+        res.status(404).send('Учасника не знайдено');
+    }
 });
 
-// Запускаємо сервер
 app.listen(port, () => {
-    console.log(`Сервер успішно запущено! Відкрий в браузері: http://localhost:${port}`);
+    console.log(`Сервер запущено: http://localhost:${port}`);
 });
