@@ -26,10 +26,10 @@ const teamMembers = {
     },
     'lukianchykova': {
         name: 'Лук\'янчикова Анна',
-        role: '-',
-        age: 0,
-        hobby: '-',
-        photo: 'https://via.placeholder.com/300'
+        role: 'Настав час щось чудити)😇',
+        age: 21,
+        hobby: 'Читання книг, комп\'ютерні та настільні ігри, чаювання)',
+        photo: '/img/lukianchykova.jpg'
     },
     'ponomarenko': {
         name: 'Пономаренко Анжеліка',
