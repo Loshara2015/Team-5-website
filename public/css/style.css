@@ -164,8 +164,8 @@ header {
 
 .search-form input {
     border: none;
-    padding: 8px 15px;
-    width: 200px;
+    padding: 10px 15px; 
+    width: 500px; 
     outline: none;
     font-size: 14px;
 }
@@ -173,10 +173,15 @@ header {
 .search-form button {
     background: var(--color-brand-light);
     border: none;
-    padding: 8px 15px;
+    padding: 0 20px; 
     cursor: pointer;
     color: var(--text-dark);
     transition: background-color 0.3s;
+    
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-form button:hover {
