@@ -39,10 +39,10 @@ const teamMembers = {
         photo: 'https://via.placeholder.com/300' },
     'romaniuk': {
         name: 'Романюк Андрій',
-        role: '-',
-        age: 0,
-        hobby: '-',
-        photo: 'https://via.placeholder.com/300' }
+        role: 'A Non-Player Character',
+        age: 19,
+        hobby: 'Художнє мяукання, полювання за привидами, дебати з голубами',
+        photo: '/img/Romanyuk.jpg' }
 };
 
 // Статична сторінка

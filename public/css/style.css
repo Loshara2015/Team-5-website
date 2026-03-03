@@ -42,22 +42,34 @@ header {
     height: 70px;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Відстань між логотипом і пунктами меню */
+}
+
 .nav_logo {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 36px; 
+    font-weight: 900; 
     color: var(--color-brand-light);
     text-decoration: none;
-    transition: color 0.3s;
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
+    transition: all 0.3s;
+    line-height: 1;
 }
 
 .nav_logo:hover {
     color: white;
+    transform: scale(1.05);
 }
 
 .header-menu ul {
     display: flex;
     list-style: none;
     gap: 20px;
+    align-items: center;
 }
 
 .header-menu a {
@@ -145,6 +157,12 @@ header {
 .team-member span {
     font-size: 14px;
     font-weight: 500;
+    color: #333; 
+    transition: color 0.3s; 
+}
+
+.team-member:hover span {
+    color: var(--color-brand-dark); /* Або var(--color-brand-light), залежно від того, який відтінок зеленого вам більше подобається */
 }
 
 /* Header Actions */
@@ -520,7 +538,7 @@ footer {
     }
 
     .team-member {
-        color: white;
+        color: #333;
     }
 
     .team-member:hover {

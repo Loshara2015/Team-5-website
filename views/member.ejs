@@ -10,57 +10,62 @@
 <body>
     <header>
         <div class="header-container">
-            <a href="/" class="nav_logo" data-target="home">Помпі</a>
-            <nav class="header-menu">
-                <ul>
-                    <li><a class="menu" href="/#main-section">Головна</a></li>
-                    <li class="dropdown">
-                        <a class="menu" href="#" id="teamBtn">Команда <i
-                                class="fas fa-chevron-down"></i></a>
-                        <div class="dropdown-content" id="dropdownContent">
-                            <a href="/member/kashyn" class="team-member">
-                                <img src="/img/kashyn.jpg" alt="Олександр">
-                                <span>Олександр Кашин</span>
-                            </a>
-                            <a href="/member/kolchin" class="team-member">
-                                <img src="/img/kolchin.jpg" alt="Владислав">
-                                <span>Владислав Колчін</span>
-                            </a>
-                            <a href="/member/lukianchykova" class="team-member">
-                                <img src="https://via.placeholder.com/40x40" alt="Анна">
-                                <span>Анна Лук'янчикова</span>
-                            </a>
-                            <a href="/member/ponomarenko" class="team-member">
-                                <img src="https://via.placeholder.com/40x40" alt="Анжеліка">
-                                <span>Анжеліка Пономаренко</span>
-                            </a>
-                            <a href="/member/romaniuk" class="team-member">
-                                <img src="https://via.placeholder.com/40x40" alt="Андрій">
-                                <span>Андрій Романюк</span>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <form class="search-form" action="/search" method="get">
-                    <input type="search" name="q" placeholder="Пошук по сайту...">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
-                <button class="catalog-btn" type="button">
-                    <i class="fas fa-bars"></i>
-                    Каталог товарів
-                </button>
-                <button class="userlogin" id="form-open">
-                    <i class="fas fa-user"></i>
-                    Логін
-                </button>
-                <button class="userlogin" id="logout-btn" style="display: none;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Вийти
-                </button>
-            </div>
-        </div>
+    
+    <div class="header-left">
+        <a href="/" class="nav_logo" data-target="home">Помпі</a>
+        <nav class="header-menu">
+            <ul>
+                <li><a class="menu" href="/#main-section">Головна</a></li>
+                <li class="dropdown">
+                    <a class="menu dropdown-btn" href="#" id="teamBtn">Команда <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content" id="dropdownContent">
+                        <a href="/member/kashyn" class="team-member">
+                            <img src="/img/kashyn.jpg" alt="Олександр">
+                            <span>Олександр Кашин</span>
+                        </a>
+                        <a href="/member/kolchin" class="team-member">
+                            <img src="/img/kolchin.jpg" alt="Владислав">
+                            <span>Владислав Колчін</span>
+                        </a>
+                        <a href="/member/lukianchykova" class="team-member">
+                            <img src="https://via.placeholder.com/40x40" alt="Анна">
+                            <span>Анна Лук'янчикова</span>
+                        </a>
+                        <a href="/member/ponomarenko" class="team-member">
+                            <img src="https://via.placeholder.com/40x40" alt="Анжеліка">
+                            <span>Анжеліка Пономаренко</span>
+                        </a>
+                        <a href="/member/romaniuk" class="team-member">
+                            <img src="/img/Romanyuk.jpg" alt="Андрій">
+                            <span>Андрій Романюк</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <form class="search-form" action="/search" method="get">
+        <input type="search" name="q" placeholder="Пошук по сайту...">
+        <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+
+    <div class="header-actions">
+        <button class="catalog-btn" type="button">
+            <i class="fas fa-bars"></i>
+            Каталог товарів
+        </button>
+        <button class="userlogin" id="form-open">
+            <i class="fas fa-user"></i>
+            Логін
+        </button>
+        <button class="userlogin" id="logout-btn" style="display: none;">
+            <i class="fas fa-sign-out-alt"></i>
+            Вийти
+        </button>
+    </div>
+    
+</div>
     </header>
 
     <main style="padding-top: 40px; display: flex; flex-direction: column; align-items: center;">
