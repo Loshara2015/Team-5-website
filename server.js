@@ -33,10 +33,10 @@ const teamMembers = {
     },
     'ponomarenko': {
         name: 'Пономаренко Анжеліка',
-        role: '-',
-        age: 0,
-        hobby: '–',
-        photo: 'https://via.placeholder.com/300' },
+        role: 'Абсолютна чемпіонка clash royal',
+        age: 18,
+        hobby: 'Концерти, театр, крипта, бомжтріпи',
+        photo: '/img/ponomarenko.jpg' },
     'romaniuk': {
         name: 'Романюк Андрій',
         role: 'A Non-Player Character',
