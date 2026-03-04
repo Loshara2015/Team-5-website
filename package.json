@@ -11,7 +11,7 @@
     "author": "roman",
     "contributors": [],
     "description": "",
-    "main": "Gruntfile.js",
+    "main": "server.js",
     "directories": {
         "test": "test"
     },
