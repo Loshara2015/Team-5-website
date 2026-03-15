@@ -45,9 +45,9 @@ const teamMembers = {
         photo: '/img/Romanyuk.jpg' }
 };
 
-// Статична сторінка
+// Головна сторінка EJS
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.render('index');
 });
 
 // Динамічна сторінка EJS

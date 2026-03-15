@@ -1,0 +1,50 @@
+<section class="golovna" id="golovna">
+    <div class="form-overlay"></div>
+    <div class="form_container" id="formContainer">
+        <i class="fas fa-times form_close"></i>
+
+        <div class="form login_form" id="loginForm">
+            <form id="formLogin">
+                <h2>Увійти</h2>
+                <div class="input_box">
+                    <input type="email" placeholder="Введіть email" required />
+                    <i class="fas fa-envelope email-icon"></i>
+                </div>
+                <div class="input_box">
+                    <input type="password" placeholder="Введіть пароль" required />
+                    <i class="fas fa-lock password-icon"></i>
+                    <i class="fas fa-eye-slash pw_hidden"></i>
+                </div>
+                <div class="option_field">
+                    <span class="checkbox">
+                        <input type="checkbox" id="check">
+                        <label for="check">Запам'ятати мене</label>
+                    </span>
+                </div>
+                <button type="submit" class="submit-btn">Увійти</button>
+                <div class="login_signup">Немає акаунту? <a href="#" id="signup">Зареєструватись</a></div>
+            </form>
+        </div>
+
+        <div class="form signup_form" id="signupForm">
+            <form id="formSignup">
+                <h2>Зареєструватись</h2>
+                <div class="input_box">
+                    <input type="email" id="signupEmail" placeholder="Введіть email" required />
+                    <i class="fas fa-envelope email-icon"></i>
+                </div>
+                <div class="input_box">
+                    <input type="password" id="signupPassword" placeholder="Введіть пароль" required />
+                    <i class="fas fa-lock password-icon"></i>
+                </div>
+                <div class="input_box">
+                    <input type="password" id="signupConfirmPassword" placeholder="Підтвердіть пароль" required />
+                    <i class="fas fa-lock password-icon"></i>
+                    <i class="fas fa-eye-slash pw_hidden"></i>
+                </div>
+                <button type="submit" class="submit-btn">Зареєструватися зараз</button>
+                <div class="login_signup">Вже маєш акаунт? <a href="#" id="login">Увійти</a></div>
+            </form>
+        </div>
+    </div>
+</section>
