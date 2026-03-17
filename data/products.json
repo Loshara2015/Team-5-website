@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "categoryId": 3,
+    "name": "Холодильник BOSCH KGN39VI306",
+    "price": 25999,
+    "description": "Чудовий холодильник з системою No Frost"
+  },
+  {
+    "id": 2,
+    "categoryId": 4,
+    "name": "Смартфон Apple iPhone 13",
+    "price": 35000,
+    "description": "Популярний смартфон від Apple"
+  },
+
+  {
+    "id": 3,
+    "categoryId": 5,
+    "name": "Романюк Андрій",
+    "price": 5,
+    "description": "Популярний смартboy від Napple"
+  },
+  {
+    "id": 4,
+    "categoryId": 5,
+    "name": "Пилосос Сосун3000",
+    "price": 9999999,
+    "description": "Сосе відмінно"
+  }
+]

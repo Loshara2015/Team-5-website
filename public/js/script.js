@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const teamBtn = document.getElementById('teamBtn');
     const dropdownContent = document.getElementById('dropdownContent');
     const logoutBtn = document.getElementById('logout-btn');
+    
+// ===== ПЕРЕХІД ДО КАТАЛОГУ =====
+    const catalogBtns = document.querySelectorAll('.catalog-btn');
+    catalogBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/catalog';
+        });
+    });
 
     // ===== ДРОПДАУН ДЛЯ КОМАНДИ =====
     if (teamBtn && dropdownContent) {

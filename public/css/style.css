@@ -545,3 +545,164 @@ footer {
         background: rgba(255, 255, 255, 0.2);
     }
 }
+/* =========================================
+   СТОРІНКИ КАТАЛОГУ (MVC)
+   ========================================= */
+.catalog-main {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.catalog-wrapper {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+}
+
+.catalog-title {
+    text-align: center;
+    color: var(--color-brand-dark);
+    margin-bottom: 20px;
+}
+
+.category-title {
+    color: var(--color-brand-dark);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--color-brand-light);
+    padding-bottom: 10px;
+}
+
+/* Список категорій */
+.category-list {
+    list-style: none;
+    padding: 0;
+}
+
+.category-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.3s;
+}
+
+.category-item:hover {
+    background: #f9f9f9;
+}
+
+.category-link {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+}
+
+.category-link i {
+    color: var(--color-brand-light);
+    margin-right: 10px;
+}
+
+/* Підкатегорії (Плитки) */
+.back-link {
+    color: var(--color-brand-dark);
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.subcategory-section {
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.subcategory-title {
+    font-size: 18px;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.subcategory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.subcategory-card {
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-brand-dark);
+    font-weight: 500;
+    transition: all 0.3s;
+    display: block;
+}
+
+.subcategory-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-color: var(--color-brand-light);
+}
+
+.subcategory-card i {
+    font-size: 30px;
+    color: var(--color-brand-light);
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Товари */
+.product-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.product-title {
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+
+.product-desc {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.product-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-brand-dark);
+}
+
+.buy-btn {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: var(--color-brand-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--text-dark);
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.buy-btn:hover {
+    background: var(--color-brand-dark);
+    color: white;
+}
