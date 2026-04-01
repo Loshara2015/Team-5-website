@@ -1,31 +1,434 @@
 [
   {
     "id": 1,
-    "categoryId": 3,
+    "categoryId": 21,
     "name": "Холодильник BOSCH KGN39VI306",
-    "price": 25999,
-    "description": "Чудовий холодильник з системою No Frost"
+    "price": 32499,
+    "description": "Чудовий холодильник з системою No Frost, VitaFresh, LED-освітлення, 10 років гарантії на компресор",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/135486112.jpg"
   },
   {
-    "id": 2,
-    "categoryId": 4,
-    "name": "Смартфон Apple iPhone 13",
-    "price": 35000,
-    "description": "Популярний смартфон від Apple"
-  },
-
-  {
-    "id": 3,
-    "categoryId": 5,
-    "name": "Романюк Андрій",
-    "price": 5,
-    "description": "Популярний смартboy від Napple"
+    "id": 101,
+    "categoryId": 21,
+    "name": "Холодильник Samsung RB33J3420SA",
+    "price": 18999,
+    "description": "Енергоефективний, тихий, об'єм 330 л",
+    "image": "https://images.prom.ua/4051694378_w600_h600_4051694378.jpg"
   },
   {
-    "id": 4,
-    "categoryId": 5,
+    "id": 102,
+    "categoryId": 21,
+    "name": "Холодильник LG GC-B247SLUV",
+    "price": 42999,
+    "description": "З вбудованим телевізором та льодогенератором",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/178727051.jpg"
+  },
+  {
+    "id": 103,
+    "categoryId": 21,
+    "name": "Морозильна камера Liebherr GN 3023",
+    "price": 21999,
+    "description": "Окрема морозильна камера, місткість 300 л",
+    "image": "https://images.prom.ua/4604099748_w600_h600_liebherr-gn-3023.jpg"
+  },
+  {
+    "id": 104,
+    "categoryId": 21,
+    "name": "Холодильник Gorenje RK60359KW",
+    "price": 15999,
+    "description": "Класичний дизайн, сухе заморожування",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/271316763.jpg"
+  },
+  {
+    "id": 105,
+    "categoryId": 22,
+    "name": "Пральна машина Bosch Serie 4 WAN28281",
+    "price": 17999,
+    "description": "Фронтальне завантаження, 8 кг",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/240479668.jpg"
+  },
+  {
+    "id": 106,
+    "categoryId": 22,
+    "name": "Пральна машина Samsung WW90T404CEE",
+    "price": 15999,
+    "description": "З парою, EcoBubble, 9 кг",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/177725449.jpg"
+  },
+  {
+    "id": 107,
+    "categoryId": 22,
+    "name": "Пральна машина LG F2J3HS0W",
+    "price": 13999,
+    "description": "Прямий привід, 7 кг",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/172668835.jpg"
+  },
+  {
+    "id": 108,
+    "categoryId": 22,
+    "name": "Пральна машина Indesit IWUB 4105",
+    "price": 8999,
+    "description": "Вузька, 4 кг, бюджетний варіант",
+    "image": "https://images.prom.ua/2730000399_w600_h600_indesit-iwub-4105.jpg"
+  },
+  {
+    "id": 109,
+    "categoryId": 22,
+    "name": "Сушарка для білизни Beko DS7333PA",
+    "price": 20999,
+    "description": "Окрема сушильна машина, 7 кг",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/299940622.jpg"
+  },
+  {
+    "id": 110,
+    "categoryId": 23,
+    "name": "Газова плита Gorenje GI 6321 XF",
+    "price": 12999,
+    "description": "Залежна, газ-контроль",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/249304087.jpg"
+  },
+  {
+    "id": 111,
+    "categoryId": 23,
+    "name": "Варочна поверхня Electrolux EHH 3920 BKK",
+    "price": 8999,
+    "description": "Індукційна, 4 конфорки",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/126753450.jpg"
+  },
+  {
+    "id": 112,
+    "categoryId": 23,
+    "name": "Духова шафа Bosch HBG634BS1",
+    "price": 28999,
+    "description": "З функцією піци та підігріву",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/169454727.jpg"
+  },
+  {
+    "id": 113,
+    "categoryId": 23,
+    "name": "Мікрохвильова піч Samsung ME83KR",
+    "price": 3999,
+    "description": "Окремо стояча, 23 л",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/150434451.jpg"
+  },
+  {
+    "id": 114,
+    "categoryId": 31,
     "name": "Пилосос Сосун3000",
     "price": 9999999,
-    "description": "Сосе відмінно"
+    "description": "Сосе відмінно",
+    "image": "https://images.prom.ua/5274942016_w600_h600_pilosos-sosun-3000.jpg"
+  },
+  {
+    "id": 115,
+    "categoryId": 31,
+    "name": "Пилосос Philips FC9332 PowerPro",
+    "price": 4999,
+    "description": "Циклонний, потужне всмоктування",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/13602166.jpg"
+  },
+  {
+    "id": 116,
+    "categoryId": 31,
+    "name": "Пилосос Karcher VC 3",
+    "price": 2299,
+    "description": "Компактний, легкий",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/204244823.jpg"
+  },
+  {
+    "id": 117,
+    "categoryId": 31,
+    "name": "Вертикальний пилосос Dyson V8 Absolute",
+    "price": 17999,
+    "description": "Бездротовий, для швидкого прибирання",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/22160457.jpg"
+  },
+  {
+    "id": 118,
+    "categoryId": 32,
+    "name": "Пароочисник Karcher SC 3 EasyFix",
+    "price": 7999,
+    "description": "Для підлоги та дезінфекції",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/187498587.jpg"
+  },
+  {
+    "id": 119,
+    "categoryId": 32,
+    "name": "Пароочисник Polaris PSC 1601C",
+    "price": 1899,
+    "description": "Ручний, для меблів та скла",
+    "image": "https://images.prom.ua/2052375234_w600_h600_paroochistnik-polaris-psc.jpg"
+  },
+  {
+    "id": 120,
+    "categoryId": 41,
+    "name": "Блендер Braun MQ 5037",
+    "price": 3499,
+    "description": "З насадками для пюре та шинкування",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/138393850.jpg"
+  },
+  {
+    "id": 121,
+    "categoryId": 41,
+    "name": "Міксер KitchenAid Artisan",
+    "price": 18999,
+    "description": "Планетарний, 10 швидкостей",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/27228338.jpg"
+  },
+  {
+    "id": 122,
+    "categoryId": 42,
+    "name": "Мультиварка Redmond RMC-M92",
+    "price": 2799,
+    "description": "З функцією йогурту та пари",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/326186181.jpg"
+  },
+  {
+    "id": 123,
+    "categoryId": 42,
+    "name": "Мультиварка Polaris PMC 0517AD",
+    "price": 1599,
+    "description": "Бюджетна, об'єм 5 л",
+    "image": "https://images.prom.ua/1234567890_w600_h600_polaris-pmc-0517ad.jpg"
+  },
+  {
+    "id": 124,
+    "categoryId": 201,
+    "name": "Смартфон Apple iPhone 13",
+    "price": 35000,
+    "description": "Популярний смартфон від Apple",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/244241020.jpg"
+  },
+  {
+    "id": 125,
+    "categoryId": 201,
+    "name": "Смартфон Samsung Galaxy S23",
+    "price": 28999,
+    "description": "Потужний камерафон",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/346369302.jpg"
+  },
+  {
+    "id": 126,
+    "categoryId": 201,
+    "name": "Смартфон Xiaomi Redmi Note 12",
+    "price": 8999,
+    "description": "Відмінний бюджетний варіант",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/337435175.jpg"
+  },
+  {
+    "id": 127,
+    "categoryId": 201,
+    "name": "Смартфон Google Pixel 7",
+    "price": 23999,
+    "description": "Чистий Android та краща камера",
+    "image": "https://images.prom.ua/4985693762_w600_h600_google-pixel-7.jpg"
+  },
+  {
+    "id": 128,
+    "categoryId": 202,
+    "name": "Чохол-книжка для iPhone 13",
+    "price": 399,
+    "description": "Шкірозамінник, магнітна застібка",
+    "image": "https://images.prom.ua/2810006359_w600_h600_chehol-knizhka-dlya.jpg"
+  },
+  {
+    "id": 129,
+    "categoryId": 202,
+    "name": "Захисне скло 9H",
+    "price": 199,
+    "description": "Універсальне, 0.33 мм",
+    "image": "https://images.prom.ua/3990574391_w600_h600_zahisne-sklo-9h.jpg"
+  },
+  {
+    "id": 130,
+    "categoryId": 301,
+    "name": "Робот-пилосос Roborock S7",
+    "price": 18999,
+    "description": "З функцією миття підлоги",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/222483460.jpg"
+  },
+  {
+    "id": 131,
+    "categoryId": 301,
+    "name": "Робот-пилосос Xiaomi Mi Robot 1S",
+    "price": 8999,
+    "description": "Лазерне картографування",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/154470671.jpg"
+  },
+  {
+    "id": 132,
+    "categoryId": 302,
+    "name": "Робот Кікі",
+    "price": 1000000,
+    "description": "Підтримає будь-яку розмову",
+    "image": "https://images.prom.ua/1234567891_w600_h600_robot-kiki.jpg"
+  },
+  {
+    "id": 133,
+    "categoryId": 302,
+    "name": "Робот-трансформер RoboBot",
+    "price": 1599,
+    "description": "Іграшка, керування пультом",
+    "image": "https://images.prom.ua/1234567892_w600_h600_robot-transformer.jpg"
+  },
+  {
+    "id": 134,
+    "categoryId": 401,
+    "name": "iPad Pro 11 (2022)",
+    "price": 38999,
+    "description": "З чіпом M2",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/282557162.jpg"
+  },
+  {
+    "id": 135,
+    "categoryId": 401,
+    "name": "iPad Air 5",
+    "price": 27999,
+    "description": "З чіпом M1",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/290462176.jpg"
+  },
+  {
+    "id": 136,
+    "categoryId": 402,
+    "name": "Samsung Tab S9",
+    "price": 29999,
+    "description": "AMOLED екран, S-Pen в комплекті",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/377979931.jpg"
+  },
+  {
+    "id": 137,
+    "categoryId": 402,
+    "name": "Xiaomi Pad 6",
+    "price": 12999,
+    "description": "Потужний для ігор та роботи",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/346785452.jpg"
+  },
+  {
+    "id": 138,
+    "categoryId": 501,
+    "name": "Ноутбук Apple MacBook Air M1",
+    "price": 32999,
+    "description": "8/256 GB, Gold",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/196058008.jpg"
+  },
+  {
+    "id": 139,
+    "categoryId": 501,
+    "name": "Ноутбук Asus ROG Zephyrus G14",
+    "price": 58999,
+    "description": "Для ігор та рендерингу",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/219876543.jpg"
+  },
+  {
+    "id": 140,
+    "categoryId": 502,
+    "name": "Монітор LG 27GN800-B",
+    "price": 10499,
+    "description": "27 дюймів, IPS, 144Hz",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/194870083.jpg"
+  },
+  {
+    "id": 141,
+    "categoryId": 502,
+    "name": "Монітор Samsung Odyssey G5",
+    "price": 11999,
+    "description": "Вигнутий, 165Hz",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/234567890.jpg"
+  },
+  {
+    "id": 142,
+    "categoryId": 601,
+    "name": "Корм Віскас для котів",
+    "price": 45,
+    "description": "Паучі з яловичиною",
+    "image": "https://images.prom.ua/1234567893_w600_h600_viskas.jpg"
+  },
+  {
+    "id": 143,
+    "categoryId": 601,
+    "name": "Сухий корм Royal Canin",
+    "price": 850,
+    "description": "Для стерилізованих котів, 2 кг",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/278569031.jpg"
+  },
+  {
+    "id": 144,
+    "categoryId": 602,
+    "name": "Корм Purina ONE для собак",
+    "price": 620,
+    "description": "Для активних порід, 1.5 кг",
+    "image": "https://images.prom.ua/1234567894_w600_h600_purina-one.jpg"
+  },
+  {
+    "id": 145,
+    "categoryId": 602,
+    "name": "Вологий корм Pedigree",
+    "price": 28,
+    "description": "Паштет для дорослих собак",
+    "image": "https://images.prom.ua/1234567895_w600_h600_pedigree.jpg"
+  },
+  {
+    "id": 146,
+    "categoryId": 701,
+    "name": "Дриль Bosch GSB 13 RE",
+    "price": 2199,
+    "description": "Ударний, 650 Вт",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/10048728.jpg"
+  },
+  {
+    "id": 147,
+    "categoryId": 701,
+    "name": "Шуруповерт Makita DF331DW",
+    "price": 3499,
+    "description": "Акумуляторний, 18В",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/25848549.jpg"
+  },
+  {
+    "id": 148,
+    "categoryId": 702,
+    "name": "Набір викруток Stanley",
+    "price": 899,
+    "description": "33 предмети",
+    "image": "https://images.prom.ua/1234567896_w600_h600_stanley.jpg"
+  },
+  {
+    "id": 149,
+    "categoryId": 702,
+    "name": "Молоток Sturm",
+    "price": 299,
+    "description": "З фібергласовою ручкою",
+    "image": "https://images.prom.ua/1234567897_w600_h600_sturm.jpg"
+  },
+  {
+    "id": 150,
+    "categoryId": 801,
+    "name": "Відеореєстратор Xiaomi 70mai",
+    "price": 2999,
+    "description": "Full HD, з gps модулем",
+    "image": "https://content1.rozetka.com.ua/goods/images/big/167876543.jpg"
+  },
+  {
+    "id": 151,
+    "categoryId": 801,
+    "name": "Автомагнітола Pioneer MVH-S320BT",
+    "price": 4599,
+    "description": "Bluetooth, USB",
+    "image": "https://content2.rozetka.com.ua/goods/images/big/245678901.jpg"
+  },
+  {
+    "id": 152,
+    "categoryId": 802,
+    "name": "Моторна олива Shell Helix Ultra",
+    "price": 1299,
+    "description": "5W-40, 4 літри",
+    "image": "https://images.prom.ua/1234567898_w600_h600_shell-helix.jpg"
+  },
+  {
+    "id": 153,
+    "categoryId": 802,
+    "name": "Антифриз Liqui Moly",
+    "price": 550,
+    "description": "Концентрат, 1.5 л",
+    "image": "https://images.prom.ua/1234567899_w600_h600_liqui-moly.jpg"
   }
 ]
