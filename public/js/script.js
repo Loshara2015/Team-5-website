@@ -337,41 +337,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // ФУНКЦІЯ ПОКАЗУ ГОЛОВНОЇ СТОРІНКИ
-    function showHomePage() {
-        // Видаляємо каталог
-        const existingCatalog = document.querySelector('.catalog-container');
-        if (existingCatalog) existingCatalog.remove();
-        
-        // Видаляємо попередні товари
-        const existingProducts = document.querySelector('.products-container');
-        if (existingProducts) existingProducts.remove();
-        
-        // Створюємо привітання
-        const welcomeSection = document.createElement('div');
-        welcomeSection.className = 'welcome-section';
-        welcomeSection.innerHTML = `
-            <h1>Ласкаво просимо до Помпі!</h1>
-            <p>Найкращий магазин електроніки та побутової техніки</p>
-            <button class="catalog-promo-btn">Переглянути каталог</button>
-        `;
+   // ФУНКЦІЯ ПОКАЗУ ГОЛОВНОЇ СТОРІНКИ
+function showHomePage() {
+    // Видаляння блоків (каталогу і товарів)
+    const existingWelcome = document.querySelector('.welcome-section');
+    const existingCatalog = document.querySelector('.catalog-container');
+    const existingProducts = document.querySelector('.products-container');
+    
+    if (existingWelcome) existingWelcome.remove();
+    if (existingCatalog) existingCatalog.remove();
+    if (existingProducts) existingProducts.remove();
+    
+    // Створюємо привітання
+    const welcomeSection = document.createElement('div');
+    welcomeSection.className = 'welcome-section';
+    welcomeSection.innerHTML = `
+        <h1>Ласкаво просимо до Помпі!</h1>
+        <p>Найкращий магазин електроніки та побутової техніки</p>
+        <button class="catalog-promo-btn">Переглянути каталог</button>
+    `;
         main.appendChild(welcomeSection);
-        
-        // Показуємо випадкові товари
-        const shuffled = [...products];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        const randomProducts = shuffled.slice(0, 8);
-        renderProducts(randomProducts, "Популярні товари");
-        
-        // Додаємо обробник для кнопки в привітанні
-        const promoBtn = document.querySelector('.catalog-promo-btn');
-        if (promoBtn) {
-            promoBtn.addEventListener('click', () => showCatalog());
-        }
+    
+    // Показ випадкових товарів
+    const shuffled = [...products];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    const randomProducts = shuffled.slice(0, 8);
+    renderProducts(randomProducts, "Популярні товари");
+    
+    // Додаємо обробник для кнопки в привітанні
+    const promoBtn = welcomeSection.querySelector('.catalog-promo-btn');
+    if (promoBtn) {
+        promoBtn.addEventListener('click', () => showCatalog());
+    }
+}
     
     //  ПЕРЕХІД ДО КАТАЛОГУ 
     const catalogBtns = document.querySelectorAll('.catalog-btn');
