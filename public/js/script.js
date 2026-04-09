@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ===== ЕЛЕМЕНТИ (ОРИГІНАЛЬНІ) =====
     const formOpenBtn = document.getElementById('form-open');
     const golovna = document.getElementById('golovna');
     const formContainer = document.getElementById('formContainer');
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const main = document.querySelector('main');
     const headerActions = document.querySelector('.header-actions');
     
-    // ===== ДАНІ ТОВАРІВ (ОРИГІНАЛЬНИЙ МАСИВ З XML) =====
+    // Дані товарів (оригінальний масив З XML)
     const products = [
       { "id": 1, "categoryId": 21, "name": "Холодильник BOSCH KGN39VI306", "price": 32499, "description": "Чудовий холодильник з системою No Frost, VitaFresh", "image": "https://content1.rozetka.com.ua/goods/images/big/135486112.jpg" },
       { "id": 101, "categoryId": 21, "name": "Холодильник Samsung RB33J3420SA", "price": 18999, "description": "Енергоефективний, тихий, об'єм 330 л", "image": "https://images.prom.ua/4051694378_w600_h600_4051694378.jpg" },
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 16, name: "Годинники, прикраси й аксесуари", icon: "fas fa-clock", color: "#f4c542" }
     ];
 
-    // ===== НОВИЙ ФУНКЦІОНАЛ КОШИКА =====
+    // Функціонал кошика
     let cart = JSON.parse(localStorage.getItem('pompi_cart')) || [];
 
     function updateCartUI() {
@@ -120,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleCartModal(true);
     };
 
-    // ===== ОРИГІНАЛЬНІ ФУНКЦІЇ ВІДОБРАЖЕННЯ (З XML) =====
+    // Оригінальні функції відображення (з XML)
     function showCatalog() {
         const existingCatalog = document.querySelector('.catalog-container');
         const existingProducts = document.querySelector('.products-container');
@@ -254,15 +253,31 @@ document.addEventListener('DOMContentLoaded', function() {
         welcomeSection.querySelector('.catalog-promo-btn').onclick = () => showCatalog();
     }
 
-    // ===== ПЕРЕХІД ДО КАТАЛОГУ (ОРИГІНАЛЬНИЙ) =====
+    // Перехід до каталогу
     document.querySelectorAll('.catalog-btn').forEach(btn => {
-        btn.onclick = (e) => { e.preventDefault(); showCatalog(); };
+        btn.onclick = (e) => { 
+            // Якщо ми не на головній сторінці, просто переходимо на сторінку каталогу
+            if (window.location.pathname !== '/') {
+                window.location.href = '/catalog';
+            } else {
+                e.preventDefault(); 
+                showCatalog(); 
+            }
+        };
     });
     
     const logo = document.querySelector('.nav_logo');
-    if (logo) logo.onclick = (e) => { e.preventDefault(); showHomePage(); };
+    if (logo) {
+        logo.onclick = (e) => { 
+            // Якщо ми не на головній сторінці, дозволяємо звичайний перехід по href="/"
+            if (window.location.pathname === '/') {
+                e.preventDefault(); 
+                showHomePage(); 
+            }
+        };
+    }
     
-    // ===== ЛОГІКА UI ТА АВТОРИЗАЦІЇ (ОРИГІНАЛЬНА) =====
+    // Логіка UI та авторизації
     if (teamBtn && dropdownContent) {
         teamBtn.onclick = (e) => {
             e.preventDefault(); e.stopPropagation();
@@ -316,5 +331,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ініціалізація
     updateAuthUI();
     updateCartUI();
-    showHomePage();
+    // Запускаємо генерацію головної сторінки тільки якщо ми знаходимось на кореневому маршруті '/'
+    if (window.location.pathname === '/') {
+        showHomePage();
+    }
 });

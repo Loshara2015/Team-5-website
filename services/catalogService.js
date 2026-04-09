@@ -1,6 +1,6 @@
 const dataRepo = require('../repositories/dataRepository');
 
-// 1. Отримання ТІЛЬКИ головних категорій (де parentId === null)
+// Отримання тільки головних категорій (де parentId === null)
 const getRootCategories = async () => {
     try {
         const categories = await dataRepo.getCategoriesPromise();
@@ -11,7 +11,7 @@ const getRootCategories = async () => {
     }
 };
 
-// 1.1 Отримання підкатегорій для конкретної категорії
+// Отримання підкатегорій для конкретної категорії
 const getSubcategories = async (parentId) => {
     try {
         const categories = await dataRepo.getCategoriesPromise();
@@ -22,13 +22,13 @@ const getSubcategories = async (parentId) => {
     }
 };
 
-// 2. Отримання категорії за її ID (використовуємо Синхронний метод)
+// Отримання категорії за її ID (використовуємо Синхронний метод)
 const getCategoryById = (categoryId) => {
     const categories = dataRepo.getCategoriesSync();
     return categories.find(c => c.id === parseInt(categoryId));
 };
 
-// 3. Отримання всіх товарів (використовуємо метод Async/Await)
+// Отримання всіх товарів (використовуємо метод Async/Await)
 const getAllProducts = async () => {
     try {
         const products = await dataRepo.getProductsAsync();
@@ -39,7 +39,7 @@ const getAllProducts = async () => {
     }
 };
 
-// 4. Отримання товарів конкретної категорії (використовуємо метод з Callback, обгорнутий у Promise для зручності)
+// Отримання товарів конкретної категорії (використовуємо метод з Callback, обгорнутий у Promise для зручності)
 const getProductsByCategory = (categoryId) => {
     return new Promise((resolve, reject) => {
         dataRepo.getProductsCallback((err, products) => {

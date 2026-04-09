@@ -8,7 +8,7 @@ app.set('view engine', 'ejs');
 // Папка 'public' для статичних файлів (CSS, JS, картинки)
 app.use(express.static('public'));
 
-// === ПІДКЛЮЧЕННЯ НОВИХ МАРШРУТІВ MVC ===
+// Підключення маршрутів MVC
 const catalogRoutes = require('./routes/catalogRoutes');
 // Всі запити, що починаються з /catalog, будуть оброблятися в catalogRoutes
 app.use('/catalog', catalogRoutes);

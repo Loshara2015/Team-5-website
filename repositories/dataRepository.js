@@ -5,10 +5,8 @@ const path = require('path');
 const categoriesPath = path.join(__dirname, '../data/categories.json');
 const productsPath = path.join(__dirname, '../data/products.json');
 
-// ==========================================
-// 1. Синхронний підхід (Synchronous)
+// Синхронний підхід
 // Блокує потік виконання, поки файл не прочитається.
-// ==========================================
 const getCategoriesSync = () => {
     try {
         const data = fs.readFileSync(categoriesPath, 'utf8');
@@ -19,10 +17,8 @@ const getCategoriesSync = () => {
     }
 };
 
-// ==========================================
-// 2. Асинхронний підхід з Callback
-// Класичний метод Node.js. Функція приймає callback, який викликається після завершення.
-// ==========================================
+// Асинхронний підхід з Callback
+// Функція приймає callback, який викликається після завершення.
 const getProductsCallback = (callback) => {
     fs.readFile(productsPath, 'utf8', (err, data) => {
         if (err) {
@@ -34,10 +30,8 @@ const getProductsCallback = (callback) => {
     });
 };
 
-// ==========================================
-// 3. Асинхронний підхід з Promise
-// Використовує ланцюжки .then() та .catch() для обробки результату або помилки.
-// ==========================================
+// Асинхронний підхід з Promise
+// Ланцюжки .then() та .catch() для обробки результату або помилки.
 const getCategoriesPromise = () => {
     return fs.promises.readFile(categoriesPath, 'utf8')
         .then(data => JSON.parse(data))
@@ -47,10 +41,7 @@ const getCategoriesPromise = () => {
         });
 };
 
-// ==========================================
-// 4. Асинхронний підхід з Async/Await
-// Найсучасніший та найзручніший спосіб. Код виглядає як синхронний, але не блокує потік.
-// ==========================================
+// Асинхронний підхід з Async/Await
 const getProductsAsync = async () => {
     try {
         const data = await fs.promises.readFile(productsPath, 'utf8');
