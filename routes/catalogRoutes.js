@@ -9,6 +9,12 @@ router.get('/', catalogController.renderCatalogPage);
 router.get('/admin', catalogController.renderAdminPage);
 router.post('/admin/products/add', catalogController.handleCreateProduct);
 
+// Сторінка редагування категорії (GET)
+router.get('/admin/categories/edit/:id', catalogController.renderEditCategoryPage);
+
+// Збереження змін категорії (POST)
+router.post('/admin/categories/edit/:id', catalogController.handleUpdateCategory);
+
 // Використовуємо контролер для видалення
 router.post('/admin/products/delete/:id', catalogController.handleDeleteProduct);
 

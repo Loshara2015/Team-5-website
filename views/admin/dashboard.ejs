@@ -110,9 +110,10 @@
                                 <%= cat.parentId ? cat.parentId : '— (Головна)' %>
                             </td>
                             <td style="padding: 10px; border: 1px solid #ddd;">
+                                <a href="/catalog/admin/categories/edit/<%= cat.id %>" style="color: blue; margin-right: 15px; text-decoration: none; font-weight: bold;">Редагувати</a>
                                 <form action="/catalog/admin/categories/delete/<%= cat.id %>" method="POST" style="display:inline;">
-                                    <button type="submit" style="color: red; border:none; background:none; cursor:pointer; font-weight: bold;" onclick="return confirm('Ви впевнені? Це також може зламати товари, які прив\'язані до цієї категорії!')">Видалити</button>
-                                </form>
+                                <button type="submit" style="color: red; border:none; background:none; cursor:pointer; font-weight: bold;" onclick="return confirm('Ви впевнені? Це також може зламати товари, які прив\'язані до цієї категорії!')">Видалити</button>
+                            </form>
                             </td>
                         </tr>
                     <% }) %>

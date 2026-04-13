@@ -106,6 +106,43 @@ const handleDeleteCategory = async (req, res) => {
     }
 };
 
+// Відображення сторінки редагування категорії
+const renderEditCategoryPage = async (req, res) => {
+    try {
+        const categoryId = req.params.id;
+        const categories = await catalogService.getAllCategories();
+        
+        // Знаходимо категорію, яку хочемо редагувати
+        const categoryToEdit = categories.find(c => c.id === parseInt(categoryId));
+        
+        if (!categoryToEdit) {
+            return res.status(404).send('Категорію не знайдено');
+        }
+
+        // Передаємо ВСІ категорії у форму (щоб можна було обрати нового "батька"),
+        // але виключаємо САМУ СЕБЕ, щоб категорія не могла стати батьком сама собі
+        const availableParents = categories.filter(c => c.id !== parseInt(categoryId));
+
+        res.render('admin/edit-category', { 
+            category: categoryToEdit, 
+            availableParents: availableParents 
+        });
+    } catch (error) {
+        res.status(500).send('Помилка завантаження сторінки редагування категорії');
+    }
+};
+
+// Обробка збереження змін
+const handleUpdateCategory = async (req, res) => {
+    try {
+        await catalogService.updateCategory(req.params.id, req.body);
+        res.redirect('/catalog/admin'); // Повертаємося в адмінку
+    } catch (error) {
+        res.status(500).send('Помилка при оновленні категорії');
+    }
+};
+
+
 module.exports = {
     renderCatalogPage,
     renderCategoryPage,
@@ -115,5 +152,7 @@ module.exports = {
     renderEditProductPage,
     handleUpdateProduct,
     handleCreateCategory,
-    handleDeleteCategory
+    handleDeleteCategory,
+    renderEditCategoryPage,
+    handleUpdateCategory
 };

@@ -136,6 +136,28 @@ const deleteCategory = async (categoryId) => {
     await dataRepo.saveCategoriesAsync(categories);
 };
 
+const updateCategory = async (categoryId, updatedData) => {
+    try {
+        const categories = await dataRepo.getCategoriesPromise();
+        const index = categories.findIndex(c => c.id === parseInt(categoryId));
+        
+        if (index !== -1) {
+            categories[index] = { 
+                ...categories[index], 
+                name: updatedData.name,
+                // Якщо parentId порожній (головна категорія), ставимо null, інакше число
+                parentId: updatedData.parentId ? parseInt(updatedData.parentId) : null
+            };
+            await dataRepo.saveCategoriesAsync(categories);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error("Помилка при оновленні категорії:", error);
+        return false;
+    }
+};
+
 // Експортуємо функції сервісу
 module.exports = {
     getRootCategories,
@@ -149,5 +171,6 @@ module.exports = {
     searchProducts,
     updateProduct,
     createCategory,
-    deleteCategory
+    deleteCategory,
+    updateCategory
 };
