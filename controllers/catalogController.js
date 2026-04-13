@@ -38,7 +38,82 @@ const renderCategoryPage = async (req, res) => {
     }
 };
 
+const renderAdminPage = async (req, res) => {
+    try {
+        const products = await catalogService.getAllProducts();
+        const categories = await catalogService.getAllCategories(); 
+        res.render('admin/dashboard', { products, categories });
+    } catch (error) {
+        res.status(500).send('Помилка завантаження адмін-панелі');
+    }
+};
+
+const handleCreateProduct = async (req, res) => {
+    await catalogService.createProduct(req.body);
+    res.redirect('/catalog/admin');
+};
+
+const handleDeleteProduct = async (req, res) => {
+    await catalogService.deleteProduct(req.params.id);
+    res.redirect('/catalog/admin');
+};
+
+// Відображення сторінки редагування товару
+const renderEditProductPage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const products = await catalogService.getAllProducts();
+        const product = products.find(p => p.id === parseInt(productId));
+        
+        if (!product) {
+            return res.status(404).send('Товар не знайдено');
+        }
+
+        const categories = await catalogService.getAllCategories();
+        res.render('admin/edit-product', { product, categories });
+    } catch (error) {
+        res.status(500).send('Помилка завантаження сторінки редагування');
+    }
+};
+
+// Обробка оновлення товару
+const handleUpdateProduct = async (req, res) => {
+    try {
+        await catalogService.updateProduct(req.params.id, req.body);
+        res.redirect('/catalog/admin');
+    } catch (error) {
+        res.status(500).send('Помилка при оновленні товару');
+    }
+};
+
+// Створення категорії
+const handleCreateCategory = async (req, res) => {
+    try {
+        await catalogService.createCategory(req.body);
+        res.redirect('/catalog/admin');
+    } catch (error) {
+        res.status(500).send('Помилка при створенні категорії');
+    }
+};
+
+// Видалення категорії
+const handleDeleteCategory = async (req, res) => {
+    try {
+        await catalogService.deleteCategory(req.params.id);
+        res.redirect('/catalog/admin');
+    } catch (error) {
+        res.status(500).send('Помилка при видаленні категорії');
+    }
+};
+
 module.exports = {
     renderCatalogPage,
-    renderCategoryPage
+    renderCategoryPage,
+    renderAdminPage,
+    handleCreateProduct,
+    handleDeleteProduct,
+    renderEditProductPage,
+    handleUpdateProduct,
+    handleCreateCategory,
+    handleDeleteCategory
 };

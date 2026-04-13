@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+app.use(express.urlencoded({ extended: true }));
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 // Налаштування EJS
 app.set('view engine', 'ejs');
 
@@ -50,9 +55,35 @@ const teamMembers = {
         photo: '/img/Romanyuk.jpg' }
 };
 
+const catalogService = require('./services/catalogService'); // Підключаємо сервіс
+
 // Головна сторінка EJS
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async (req, res) => {
+    try {
+        const allProducts = await catalogService.getAllProducts(); // Отримуємо всі товари
+        const featuredProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0, 8); // Беремо 8 випадкових товарів для блоку "Популярні товари"
+        
+        res.render('index', { featuredProducts: featuredProducts }); // Передаємо ці товари у шаблон index.ejs
+    } catch (error) {
+        console.error("Помилка при завантаженні головної сторінки:", error);
+        res.render('index', { featuredProducts: [] });
+    }
+});
+
+// Маршрут для обробки пошуку
+app.get('/search', async (req, res) => {
+    try {
+        const query = req.query.q; // Отримуємо текст з параметра ?q=... в URL
+        const searchResults = await catalogService.searchProducts(query);
+        
+        res.render('index', { 
+            featuredProducts: searchResults,
+            searchQuery: query 
+        });
+    } catch (error) {
+        console.error("Помилка пошуку:", error);
+        res.status(500).send('Помилка сервера під час пошуку');
+    }
 });
 
 // Динамічна сторінка EJS

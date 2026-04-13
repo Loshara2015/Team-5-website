@@ -158,5 +158,20 @@
     "id": 802,
     "name": "Масла та рідини",
     "parentId": 8
+  },
+  {
+    "id": 803,
+    "name": "Ігрові приставки",
+    "parentId": null
+  },
+  {
+    "id": 804,
+    "name": "Playstation",
+    "parentId": 803
+  },
+  {
+    "id": 805,
+    "name": "Xbox",
+    "parentId": 803
   }
 ]

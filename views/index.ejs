@@ -6,7 +6,52 @@
 <body>
     <%- include('partials/header') %>
 
-    <main id="main-section">
+   <main id="main-section">
+        <% if (!locals.searchQuery) { %>
+            <div class="welcome-section">
+                <h1>Ласкаво просимо до Помпі!</h1>
+                <p>Найкращий магазин електроніки та побутової техніки</p>
+                <a href="/catalog" class="catalog-promo-btn" style="display:inline-block; text-decoration:none;">Переглянути каталог</a>
+            </div>
+        <% } %>
+
+        <div class="products-container">
+            <h2 class="products-section-title">
+                <% if (locals.searchQuery) { %>
+                    <i class="fas fa-search"></i> Результати пошуку для: "<%= searchQuery %>"
+                <% } else { %>
+                    <i class="fas fa-tags"></i> Популярні товари
+                <% } %>
+            </h2>
+            
+            <% if (locals.searchQuery) { %>
+                <a href="/" class="back-to-catalog-btn" style="text-decoration: none; display: inline-flex; margin-bottom: 20px;">
+                    <i class="fas fa-arrow-left"></i> Повернутися на головну
+                </a>
+            <% } %>
+            
+            <div class="products-grid">
+                <% if (featuredProducts && featuredProducts.length > 0) { %>
+                    <% featuredProducts.forEach(function(product) { %>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="<%= product.image %>" alt="<%= product.name %>" onerror="this.src='https://via.placeholder.com/300x200'">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title"><%= product.name %></h3>
+                                <p class="product-desc"><%= product.description %></p>
+                                <div class="product-price">
+                                    <%= new Intl.NumberFormat('uk-UA', { style: 'currency', currency: 'UAH', maximumFractionDigits: 0 }).format(product.price) %>
+                                </div>
+                                <button class="buy-btn" data-name="<%= product.name %>" data-price="<%= product.price %>">Купити</button>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="text-align: center; width: 100%;">Товарів поки немає.</p>
+                <% } %>
+            </div>
+        </div>
     </main>
 
     <%- include('partials/auth-forms') %>

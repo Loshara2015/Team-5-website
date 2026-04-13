@@ -52,10 +52,32 @@ const getProductsAsync = async () => {
     }
 };
 
+const saveProductsAsync = async (products) => {
+    try {
+        await fs.promises.writeFile(productsPath, JSON.stringify(products, null, 2), 'utf8');
+        return true;
+    } catch (error) {
+        console.error('Помилка збереження товарів:', error);
+        return false;
+    }
+};
+
+const saveCategoriesAsync = async (categories) => {
+    try {
+        await fs.promises.writeFile(categoriesPath, JSON.stringify(categories, null, 2), 'utf8');
+        return true;
+    } catch (error) {
+        console.error('Помилка збереження категорій:', error);
+        return false;
+    }
+};
+
 // Експортуємо всі методи, щоб їх могли використовувати сервіси
 module.exports = {
     getCategoriesSync,
     getProductsCallback,
     getCategoriesPromise,
-    getProductsAsync
+    getProductsAsync,
+    saveProductsAsync,
+    saveCategoriesAsync
 };

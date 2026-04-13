@@ -178,12 +178,15 @@ header {
     background: white;
     border-radius: 20px;
     overflow: hidden;
+    flex: 1; 
+    max-width: 500px; 
+    margin: 0 20px; /* Відступи по боках, щоб не прилипало до меню і кнопок */
 }
 
 .search-form input {
     border: none;
     padding: 10px 15px; 
-    width: 500px; 
+    width: 100%; 
     outline: none;
     font-size: 14px;
 }
@@ -506,10 +509,12 @@ footer {
         justify-content: center;
     }
 
-    .header-actions {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+   .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0; 
+}
 
     .footer-container {
         grid-template-columns: 1fr;

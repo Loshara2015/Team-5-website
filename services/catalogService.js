@@ -55,11 +55,99 @@ const getProductsByCategory = (categoryId) => {
     });
 };
 
+const createProduct = async (productData) => {
+    const products = await dataRepo.getProductsAsync();
+    const newProduct = {
+        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+        ...productData,
+        price: parseInt(productData.price),
+        categoryId: parseInt(productData.categoryId) // <--- ДОДАНО ПЕРЕТВОРЕННЯ В ЧИСЛО
+    };
+    products.push(newProduct);
+    await dataRepo.saveProductsAsync(products);
+    return newProduct;
+};
+
+const deleteProduct = async (productId) => {
+    let products = await dataRepo.getProductsAsync();
+    products = products.filter(p => p.id !== parseInt(productId));
+    return await dataRepo.saveProductsAsync(products);
+};
+
+const getAllCategories = async () => {
+    try {
+        const categories = await dataRepo.getCategoriesPromise();
+        return categories;
+    } catch (error) {
+        console.error("Помилка при отриманні всіх категорій:", error);
+        return [];
+    }
+};
+
+const searchProducts = async (searchQuery) => {
+    try {
+        if (!searchQuery) return []; // Якщо запит порожній, нічого не шукаємо
+        
+        const products = await dataRepo.getProductsAsync();
+        const lowerQuery = searchQuery.toLowerCase(); // Переводимо запит у нижній регістр для зручності
+        
+        // Фільтруємо товари, де назва або опис містять текст пошуку
+        return products.filter(p => 
+            p.name.toLowerCase().includes(lowerQuery) || 
+            p.description.toLowerCase().includes(lowerQuery)
+        );
+    } catch (error) {
+        console.error("Помилка при пошуку товарів:", error);
+        return [];
+    }
+};
+
+// Оновлення існуючого товару
+const updateProduct = async (productId, updatedData) => {
+    const products = await dataRepo.getProductsAsync();
+    const index = products.findIndex(p => p.id === parseInt(productId));
+    if (index !== -1) {
+        products[index] = { 
+            ...products[index], 
+            ...updatedData,
+            price: parseInt(updatedData.price),
+            categoryId: parseInt(updatedData.categoryId)
+        };
+        await dataRepo.saveProductsAsync(products);
+    }
+};
+
+// Створення категорій
+const createCategory = async (categoryData) => {
+    const categories = await dataRepo.getCategoriesPromise();
+    const newCategory = {
+        id: categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1,
+        name: categoryData.name,
+        parentId: categoryData.parentId ? parseInt(categoryData.parentId) : null
+    };
+    categories.push(newCategory);
+    await dataRepo.saveCategoriesAsync(categories);
+};
+
+const deleteCategory = async (categoryId) => {
+    let categories = await dataRepo.getCategoriesPromise();
+    // Видаляємо саму категорію
+    categories = categories.filter(c => c.id !== parseInt(categoryId));
+    await dataRepo.saveCategoriesAsync(categories);
+};
+
 // Експортуємо функції сервісу
 module.exports = {
     getRootCategories,
     getSubcategories,
     getCategoryById,
     getAllProducts,
-    getProductsByCategory
+    getProductsByCategory,
+    createProduct,
+    deleteProduct,
+    getAllCategories,
+    searchProducts,
+    updateProduct,
+    createCategory,
+    deleteCategory
 };
