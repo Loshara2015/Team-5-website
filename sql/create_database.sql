@@ -1,0 +1,1 @@
+CREATE DATABASE pompi_catalog;
