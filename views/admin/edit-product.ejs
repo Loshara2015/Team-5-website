@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <%- include('../partials/head', { title: 'Редагування: ' + product.name }) %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <main class="catalog-main">
+        <div class="catalog-wrapper">
+            <a href="/catalog/admin" class="back-link"><i class="fas fa-arrow-left"></i> Назад до адмінки</a>
+            <h1>Редагування товару #<%= product.id %></h1>
+
+            <form action="/catalog/admin/products/edit/<%= product.id %>" method="POST" style="margin-top: 20px;">
+                <div style="margin-bottom: 15px;">
+                    <label>Назва товару:</label>
+                    <input type="text" name="name" value="<%= product.name %>" required style="width:100%; padding: 8px;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label>Опис:</label>
+                    <textarea name="description" required style="width:100%; padding: 8px; height: 100px;"><%= product.description %></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label>Ціна (₴):</label>
+                    <input type="number" name="price" value="<%= product.price %>" required style="width:100%; padding: 8px;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label>URL картинки:</label>
+                    <input type="text" name="image" value="<%= product.image %>" required style="width:100%; padding: 8px;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label>Категорія:</label>
+                    <select name="categoryId" required style="width:100%; padding: 8px;">
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat.id %>" <%= product.categoryId === cat.id ? 'selected' : '' %>>
+                                <%= cat.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <button type="submit" class="buy-btn">Зберегти зміни</button>
+            </form>
+        </div>
+    </main>
+    <%- include('../partials/footer') %>
+</body>
+</html>

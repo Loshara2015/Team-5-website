@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <%- include('../partials/head', { title: 'Редагування категорії' }) %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <main class="catalog-main">
+        <div class="catalog-wrapper">
+            <a href="/catalog/admin" class="back-link"><i class="fas fa-arrow-left"></i> Назад до адмінки</a>
+            
+            <h1 style="margin-bottom: 20px;">Редагування категорії: <%= category.name %></h1>
+
+            <form action="/catalog/admin/categories/edit/<%= category.id %>" method="POST">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Назва категорії:</label>
+                    <input type="text" name="name" value="<%= category.name %>" required style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Батьківська категорія:</label>
+                    <select name="parentId" style="width:100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="" <%= category.parentId === null ? 'selected' : '' %>>
+                            -- Немає (Зробити головною категорією) --
+                        </option>
+                        
+                        <% availableParents.forEach(parent => { %>
+                            <option value="<%= parent.id %>" <%= category.parentId === parent.id ? 'selected' : '' %>>
+                                <%= parent.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+                
+                <button type="submit" class="buy-btn" style="width: 100%;">Зберегти зміни</button>
+            </form>
+        </div>
+    </main>
+    <%- include('../partials/footer') %>
+</body>
+</html>

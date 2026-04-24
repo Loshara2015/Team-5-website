@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <%- include('partials/head', { title: 'Каталог товарів - Помпі' }) %>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main class="catalog-main">
+        <div class="catalog-wrapper">
+            <h1 class="catalog-title">Каталог товарів</h1>
+            
+            <div class="categories-grid">
+                <% 
+                    /* Словник стилів (іконки та кольори) для відображення карток. 
+                       Прив'язуємо їх до ID категорій з вашої бази даних (categories.json) */
+                    const categoryStyles = {
+                        1: { icon: "fas fa-blender", color: "#2c3e50" },         // Побутова техніка
+                        2: { icon: "fas fa-mobile-alt", color: "#3498db" },      // Смартфони
+                        3: { icon: "fas fa-robot", color: "#e74c3c" },           // Роботи
+                        4: { icon: "fas fa-tablet-alt", color: "#1abc9c" },      // Планшети
+                        5: { icon: "fas fa-laptop-code", color: "#9b59b6" },     // Комп'ютери
+                        6: { icon: "fas fa-paw", color: "#e84393" },             // Зоотовари
+                        7: { icon: "fas fa-tools", color: "#95a5a6" },           // Інструменти
+                        8: { icon: "fas fa-car", color: "#e67e22" },             // Авто і мото
+                        803: { icon: "fas fa-gamepad", color: "#f39c12" }        // Ігрові приставки (нова з БД)
+                    };
+                %>
+
+                <% if (categories && categories.length > 0) { %>
+                    <% categories.forEach(function(category) { 
+                        // Шукаємо стиль за ID. Якщо немає — ставимо стандартний
+                        const style = categoryStyles[category.id] || { icon: "fas fa-folder", color: "var(--color-brand-dark)" };
+                    %>
+                        <div class="category-card" style="border-top: 3px solid <%= style.color %>;" onclick="window.location.href='/catalog/<%= category.id %>'">
+                            <div class="category-icon" style="background: <%= style.color %>20; color: <%= style.color %>;">
+                                <i class="<%= style.icon %>"></i>
+                            </div>
+                            <h3 class="category-name"><%= category.name %></h3>
+                            <p class="category-count">Переглянути товари <i class="fas fa-arrow-right"></i></p>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="text-align: center; width: 100%;">Категорій поки немає.</p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <%- include('partials/auth-forms') %>
+    <%- include('partials/footer') %>
+</body>
+</html>
