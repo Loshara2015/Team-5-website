@@ -7,6 +7,13 @@
     <%- include('../partials/header') %>
     <main class="catalog-main">
         <div class="catalog-wrapper">
+
+            <% if (message) { %>
+                <div class="admin-message <%= status === 'success' ? 'admin-message--success' : 'admin-message--error' %>">
+                    <%= message %>
+                </div>
+            <% } %>        
+
             <h1>Управління товарами</h1>
             
             <section style="margin-bottom: 40px; padding: 20px; border: 1px solid #eee;">
@@ -87,6 +94,38 @@
                     </div>
                     
                     <button type="submit" class="buy-btn">Створити категорію</button>
+                </form>
+            </section>
+
+            <section style="margin-bottom: 40px; padding: 20px; border: 1px solid #eee; background: #f8fafc;">
+                <h3>Демонстрація транзакції: категорія + товар</h3>
+                <p style="margin: 10px 0 15px 0; color: #555;">
+                    Ця операція в одній транзакції спочатку створює категорію, а потім товар у ній.
+                    Якщо ввімкнути генерацію помилки, вставка товару зламається через обмеження ціни,
+                    і PostgreSQL відкотить усю операцію.
+                </p>
+
+                <form action="/catalog/admin/demo/category-with-product" method="POST" style="margin-top: 15px;">
+                    <input type="text" name="categoryName" placeholder="Назва нової категорії" required style="width:100%; margin-bottom:10px;">
+                    
+                    <select name="parentId" style="width:100%; margin-bottom:10px; padding: 8px;">
+                        <option value="">-- Без батьківської категорії --</option>
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat.id %>"><%= cat.name %></option>
+                        <% }) %>
+                    </select>
+
+                    <input type="text" name="productName" placeholder="Назва товару" required style="width:100%; margin-bottom:10px;">
+                    <textarea name="productDescription" placeholder="Опис товару" required style="width:100%; margin-bottom:10px;"></textarea>
+                    <input type="number" name="productPrice" step="0.01" min="0" placeholder="Ціна товару" required style="width:100%; margin-bottom:10px;">
+                    <input type="text" name="productImage" placeholder="URL картинки товару" required style="width:100%; margin-bottom:10px;">
+
+                    <label style="display:flex; align-items:center; gap:8px; margin-bottom:15px;">
+                        <input type="checkbox" name="simulateError" value="true">
+                        Згенерувати помилку та перевірити ROLLBACK
+                    </label>
+
+                    <button type="submit" class="buy-btn">Виконати бізнес-операцію</button>
                 </form>
             </section>
 
