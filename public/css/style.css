@@ -566,7 +566,6 @@ footer {
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 800px;
 }
 
 .catalog-title {
@@ -640,30 +639,49 @@ footer {
     gap: 15px;
 }
 
+/* Оновлений дизайн для карток підкатегорій */
 .subcategory-card {
-    background: #f8f9fa;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 25px 20px;
     text-align: center;
     text-decoration: none;
-    color: var(--color-brand-dark);
-    font-weight: 500;
-    transition: all 0.3s;
-    display: block;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
 }
 
 .subcategory-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
     border-color: var(--color-brand-light);
+    color: var(--color-brand-dark);
 }
 
 .subcategory-card i {
-    font-size: 30px;
-    color: var(--color-brand-light);
-    margin-bottom: 10px;
-    display: block;
+    font-size: 26px;
+    color: var(--color-brand-dark);
+    background: rgba(0, 255, 178, 0.15);
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.subcategory-card:hover i {
+    background: var(--color-brand-light);
+    color: white;
+    transform: scale(1.1);
 }
 
 /* Товари */
