@@ -1,16 +1,16 @@
-const { Pool } = require('pg');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const pool = new Pool({
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    host: process.env.PGHOST || 'localhost',
-    port: Number(process.env.PGPORT || 5432),
-    database: process.env.PGDATABASE
-});
+const sequelize = new Sequelize(
+    process.env.PGDATABASE,
+    process.env.PGUSER,
+    process.env.PGPASSWORD,
+    {
+        host: process.env.PGHOST || 'localhost',
+        port: Number(process.env.PGPORT || 5432),
+        dialect: 'postgres',
+        logging: false // Вимикаємо вивід SQL запитів у консоль, щоб не засмічувати її
+    }
+);
 
-pool.on('error', (error) => {
-    console.error('Unexpected error on idle PostgreSQL client', error);
-});
-
-module.exports = pool;
+module.exports = sequelize;

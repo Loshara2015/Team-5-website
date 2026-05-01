@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('./config/db');
+const sequelize = require('./config/db');
 const catalogService = require('./services/catalogService');
 const catalogRoutes = require('./routes/catalogRoutes');
 
@@ -92,8 +92,8 @@ app.get('/member/:id', (req, res) => {
 
 const startServer = async () => {
     try {
-        await pool.query('SELECT NOW()');
-        console.log('PostgreSQL connection established successfully');
+        await sequelize.authenticate(); // Використовуємо метод Sequelize для перевірки підключення
+        console.log('PostgreSQL connection established successfully via Sequelize');
         app.listen(port, () => {
             console.log(`Server started: http://localhost:${port}`);
         });

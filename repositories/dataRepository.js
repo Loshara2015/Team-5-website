@@ -1,309 +1,201 @@
-const pool = require('../config/db');
+const { Op } = require('sequelize');
+const sequelize = require('../config/db');
+const { Category, Product } = require('../models');
 
-const mapCategory = (row) => ({
-    id: row.id,
-    name: row.name,
-    parentId: row.parent_id
-});
+// Допоміжні функції для збереження старого формату даних, 
+// який очікують контролери та сервіси
+const mapCategory = (category) => {
+    if (!category) return null;
+    return {
+        id: category.id,
+        name: category.name,
+        parentId: category.parentId
+    };
+};
 
-const mapProduct = (row) => ({
-    id: row.id,
-    categoryId: row.category_id,
-    name: row.name,
-    price: Number(row.price),
-    description: row.description,
-    image: row.image
-});
-
-const withTransaction = async (callback) => {
-    const client = await pool.connect();
-
-    try {
-        await client.query('BEGIN');
-        const result = await callback(client);
-        await client.query('COMMIT');
-        return result;
-    } catch (error) {
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
+const mapProduct = (product) => {
+    if (!product) return null;
+    return {
+        id: product.id,
+        categoryId: product.categoryId,
+        name: product.name,
+        price: Number(product.price),
+        description: product.description,
+        image: product.image
+    };
 };
 
 const getRootCategories = async () => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, name, parent_id
-        FROM categories
-        WHERE parent_id IS NULL
-        ORDER BY id
-        `
-    );
-
-    return rows.map(mapCategory);
+    const categories = await Category.findAll({
+        where: { parentId: null },
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
 };
 
 const getSubcategories = async (parentId) => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, name, parent_id
-        FROM categories
-        WHERE parent_id = $1
-        ORDER BY id
-        `,
-        [parentId]
-    );
-
-    return rows.map(mapCategory);
+    const categories = await Category.findAll({
+        where: { parentId },
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
 };
 
 const getAllCategories = async () => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, name, parent_id
-        FROM categories
-        ORDER BY id
-        `
-    );
-
-    return rows.map(mapCategory);
+    const categories = await Category.findAll({
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
 };
 
 const getCategoryById = async (categoryId) => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, name, parent_id
-        FROM categories
-        WHERE id = $1
-        `,
-        [categoryId]
-    );
-
-    return rows[0] ? mapCategory(rows[0]) : null;
+    const category = await Category.findByPk(categoryId);
+    return mapCategory(category);
 };
 
 const createCategory = async (categoryData) => {
-    return withTransaction(async (client) => {
-        const { rows } = await client.query(
-            `
-            INSERT INTO categories (name, parent_id)
-            VALUES ($1, $2)
-            RETURNING id, name, parent_id
-            `,
-            [categoryData.name, categoryData.parentId]
-        );
-
-        return mapCategory(rows[0]);
+    return sequelize.transaction(async (t) => {
+        const category = await Category.create({
+            name: categoryData.name,
+            parentId: categoryData.parentId
+        }, { transaction: t });
+        
+        return mapCategory(category);
     });
 };
 
 const updateCategory = async (categoryId, categoryData) => {
-    return withTransaction(async (client) => {
-        const { rows } = await client.query(
-            `
-            UPDATE categories
-            SET name = $1,
-                parent_id = $2,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE id = $3
-            RETURNING id, name, parent_id
-            `,
-            [categoryData.name, categoryData.parentId, categoryId]
-        );
+    return sequelize.transaction(async (t) => {
+        const category = await Category.findByPk(categoryId, { transaction: t });
+        if (!category) return null;
 
-        return rows[0] ? mapCategory(rows[0]) : null;
+        await category.update({
+            name: categoryData.name,
+            parentId: categoryData.parentId
+        }, { transaction: t });
+
+        return mapCategory(category);
     });
 };
 
 const deleteCategory = async (categoryId) => {
-    return withTransaction(async (client) => {
-        const childCategoriesResult = await client.query(
-            `
-            SELECT COUNT(*)::int AS count
-            FROM categories
-            WHERE parent_id = $1
-            `,
-            [categoryId]
-        );
+    return sequelize.transaction(async (t) => {
+        // Перевіряємо чи є підкатегорії або товари (як у старому коді)
+        const childCount = await Category.count({ where: { parentId: categoryId }, transaction: t });
+        const productCount = await Product.count({ where: { categoryId: categoryId }, transaction: t });
 
-        const productsResult = await client.query(
-            `
-            SELECT COUNT(*)::int AS count
-            FROM products
-            WHERE category_id = $1
-            `,
-            [categoryId]
-        );
-
-        if (childCategoriesResult.rows[0].count > 0 || productsResult.rows[0].count > 0) {
+        if (childCount > 0 || productCount > 0) {
             throw new Error('Category contains subcategories or products.');
         }
 
-        const { rows } = await client.query(
-            `
-            DELETE FROM categories
-            WHERE id = $1
-            RETURNING id, name, parent_id
-            `,
-            [categoryId]
-        );
-
-        return rows[0] ? mapCategory(rows[0]) : null;
+        const category = await Category.findByPk(categoryId, { transaction: t });
+        if (category) {
+            await category.destroy({ transaction: t });
+        }
+        
+        return mapCategory(category);
     });
 };
 
 const getAllProducts = async () => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, category_id, name, description, price, image
-        FROM products
-        ORDER BY id
-        `
-    );
-
-    return rows.map(mapProduct);
+    const products = await Product.findAll({
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
 };
 
 const getProductById = async (productId) => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, category_id, name, description, price, image
-        FROM products
-        WHERE id = $1
-        `,
-        [productId]
-    );
-
-    return rows[0] ? mapProduct(rows[0]) : null;
+    const product = await Product.findByPk(productId);
+    return mapProduct(product);
 };
 
 const getProductsByCategory = async (categoryId) => {
-    const { rows } = await pool.query(
-        `
-        SELECT id, category_id, name, description, price, image
-        FROM products
-        WHERE category_id = $1
-        ORDER BY id
-        `,
-        [categoryId]
-    );
-
-    return rows.map(mapProduct);
+    const products = await Product.findAll({
+        where: { categoryId },
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
 };
 
 const searchProducts = async (searchQuery) => {
     const pattern = `%${searchQuery}%`;
-
-    const { rows } = await pool.query(
-        `
-        SELECT id, category_id, name, description, price, image
-        FROM products
-        WHERE name ILIKE $1 OR description ILIKE $1
-        ORDER BY id
-        `,
-        [pattern]
-    );
-
-    return rows.map(mapProduct);
+    const products = await Product.findAll({
+        where: {
+            [Op.or]: [
+                { name: { [Op.iLike]: pattern } },
+                { description: { [Op.iLike]: pattern } }
+            ]
+        },
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
 };
 
 const createProduct = async (productData) => {
-    return withTransaction(async (client) => {
-        const { rows } = await client.query(
-            `
-            INSERT INTO products (category_id, name, description, price, image)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, category_id, name, description, price, image
-            `,
-            [
-                productData.categoryId,
-                productData.name,
-                productData.description,
-                productData.price,
-                productData.image
-            ]
-        );
+    return sequelize.transaction(async (t) => {
+        const product = await Product.create({
+            categoryId: productData.categoryId,
+            name: productData.name,
+            description: productData.description,
+            price: productData.price,
+            image: productData.image
+        }, { transaction: t });
 
-        return mapProduct(rows[0]);
+        return mapProduct(product);
     });
 };
 
 const updateProduct = async (productId, productData) => {
-    return withTransaction(async (client) => {
-        const { rows } = await client.query(
-            `
-            UPDATE products
-            SET category_id = $1,
-                name = $2,
-                description = $3,
-                price = $4,
-                image = $5,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE id = $6
-            RETURNING id, category_id, name, description, price, image
-            `,
-            [
-                productData.categoryId,
-                productData.name,
-                productData.description,
-                productData.price,
-                productData.image,
-                productId
-            ]
-        );
+    return sequelize.transaction(async (t) => {
+        const product = await Product.findByPk(productId, { transaction: t });
+        if (!product) return null;
 
-        return rows[0] ? mapProduct(rows[0]) : null;
+        await product.update({
+            categoryId: productData.categoryId,
+            name: productData.name,
+            description: productData.description,
+            price: productData.price,
+            image: productData.image
+        }, { transaction: t });
+
+        return mapProduct(product);
     });
 };
 
 const deleteProduct = async (productId) => {
-    return withTransaction(async (client) => {
-        const { rows } = await client.query(
-            `
-            DELETE FROM products
-            WHERE id = $1
-            RETURNING id, category_id, name, description, price, image
-            `,
-            [productId]
-        );
-
-        return rows[0] ? mapProduct(rows[0]) : null;
+    return sequelize.transaction(async (t) => {
+        const product = await Product.findByPk(productId, { transaction: t });
+        if (product) {
+            await product.destroy({ transaction: t });
+        }
+        return mapProduct(product);
     });
 };
 
+// Бізнес-операція для демонстрації транзакції (ROLLBACK)
 const createCategoryWithProduct = async (payload) => {
-    return withTransaction(async (client) => {
-        const categoryResult = await client.query(
-            `
-            INSERT INTO categories (name, parent_id)
-            VALUES ($1, $2)
-            RETURNING id, name, parent_id
-            `,
-            [payload.categoryName, payload.parentId]
-        );
+    return sequelize.transaction(async (t) => {
+        // Крок 1: Створюємо категорію
+        const category = await Category.create({
+            name: payload.categoryName,
+            parentId: payload.parentId
+        }, { transaction: t });
 
-        const category = mapCategory(categoryResult.rows[0]);
+        // Якщо увімкнена симуляція помилки, ставимо ціну -1 (це порушить обмеження моделі)
         const priceToSave = payload.simulateError ? -1 : payload.productPrice;
 
-        const productResult = await client.query(
-            `
-            INSERT INTO products (category_id, name, description, price, image)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, category_id, name, description, price, image
-            `,
-            [
-                category.id,
-                payload.productName,
-                payload.productDescription,
-                priceToSave,
-                payload.productImage
-            ]
-        );
+        // Крок 2: Створюємо товар. Якщо тут буде помилка, категорія теж не збережеться.
+        const product = await Product.create({
+            categoryId: category.id,
+            name: payload.productName,
+            description: payload.productDescription,
+            price: priceToSave,
+            image: payload.productImage
+        }, { transaction: t });
 
         return {
-            category,
-            product: mapProduct(productResult.rows[0])
+            category: mapCategory(category),
+            product: mapProduct(product)
         };
     });
 };
