@@ -29,6 +29,6 @@ Ctrl+C у вікні терміналу - зупинити сервер.
 
 7. Якщо все правильно, то в консолі має з'явитися повідомлення:
    *
-   PostgreSQL connection established successfully
+   PostgreSQL connection established successfully via Sequelize
    Server started: http://localhost:3000
    *

@@ -2,12 +2,13 @@ require('dotenv').config();
 
 const fs = require('fs/promises');
 const path = require('path');
-const pool = require('../config/db');
+const sequelize = require('../config/db');
+const { Category, Product } = require('../models');
 
 const categoriesPath = path.join(__dirname, '../data/categories.json');
 const productsPath = path.join(__dirname, '../data/products.json');
 
-const insertCategoriesInTreeOrder = async (client, categories) => {
+const insertCategoriesInTreeOrder = async (categories, transaction) => {
     const insertedIds = new Set();
     const remaining = [...categories];
 
@@ -17,16 +18,17 @@ const insertCategoriesInTreeOrder = async (client, categories) => {
         });
 
         if (readyCategories.length === 0) {
-            throw new Error('Unable to resolve category hierarchy while seeding.');
+            throw new Error('Не вдалося визначити порядок вставки категорій. Перевірте parentId у categories.json.');
         }
 
         for (const category of readyCategories) {
-            await client.query(
-                `
-                INSERT INTO categories (id, name, parent_id)
-                VALUES ($1, $2, $3)
-                `,
-                [category.id, category.name, category.parentId]
+            await Category.create(
+                {
+                    id: category.id,
+                    name: category.name,
+                    parentId: category.parentId
+                },
+                { transaction }
             );
 
             insertedIds.add(category.id);
@@ -40,9 +42,9 @@ const insertCategoriesInTreeOrder = async (client, categories) => {
 };
 
 const seed = async () => {
-    const client = await pool.connect();
-
     try {
+        await sequelize.authenticate();
+
         const [rawCategories, rawProducts] = await Promise.all([
             fs.readFile(categoriesPath, 'utf8'),
             fs.readFile(productsPath, 'utf8')
@@ -51,57 +53,60 @@ const seed = async () => {
         const categories = JSON.parse(rawCategories);
         const products = JSON.parse(rawProducts);
 
-        await client.query('BEGIN');
-
-        await client.query('TRUNCATE TABLE products, categories RESTART IDENTITY CASCADE');
-
-        await insertCategoriesInTreeOrder(client, categories);
-
-        for (const product of products) {
-            await client.query(
-                `
-                INSERT INTO products (id, category_id, name, description, price, image)
-                VALUES ($1, $2, $3, $4, $5, $6)
-                `,
-                [
-                    product.id,
-                    product.categoryId,
-                    product.name,
-                    product.description,
-                    Number(product.price),
-                    product.image
-                ]
+        await sequelize.transaction(async (transaction) => {
+            await sequelize.query(
+                'TRUNCATE TABLE products, categories RESTART IDENTITY CASCADE',
+                { transaction }
             );
-        }
 
-        await client.query(`
-            SELECT setval(
-                pg_get_serial_sequence('categories', 'id'),
-                COALESCE((SELECT MAX(id) FROM categories), 1),
-                true
-            )
-        `);
+            await insertCategoriesInTreeOrder(categories, transaction);
 
-        await client.query(`
-            SELECT setval(
-                pg_get_serial_sequence('products', 'id'),
-                COALESCE((SELECT MAX(id) FROM products), 1),
-                true
-            )
-        `);
+            await Product.bulkCreate(
+                products.map((product) => ({
+                    id: product.id,
+                    categoryId: product.categoryId,
+                    name: product.name,
+                    description: product.description,
+                    price: Number(product.price),
+                    image: product.image
+                })),
+                {
+                    transaction,
+                    validate: true
+                }
+            );
 
-        await client.query('COMMIT');
+            await sequelize.query(
+                `
+                SELECT setval(
+                    pg_get_serial_sequence('categories', 'id'),
+                    COALESCE((SELECT MAX(id) FROM categories), 1),
+                    true
+                )
+                `,
+                { transaction }
+            );
+
+            await sequelize.query(
+                `
+                SELECT setval(
+                    pg_get_serial_sequence('products', 'id'),
+                    COALESCE((SELECT MAX(id) FROM products), 1),
+                    true
+                )
+                `,
+                { transaction }
+            );
+        });
 
         console.log(
             `Seed completed successfully: ${categories.length} categories and ${products.length} products inserted.`
         );
     } catch (error) {
-        await client.query('ROLLBACK');
-        console.error('Seed failed', error);
+        console.error('Seed failed:', error.message);
         process.exitCode = 1;
     } finally {
-        client.release();
-        await pool.end();
+        await sequelize.close();
     }
 };
 
