@@ -4,7 +4,7 @@ const catalogService = require('./services/catalogService');
 const catalogRoutes = require('./routes/catalogRoutes');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const apiRoutes = require('./routes/apiRoutes');
 app.use(express.json());
