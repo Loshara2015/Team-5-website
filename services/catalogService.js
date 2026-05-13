@@ -1,176 +1,162 @@
 const dataRepo = require('../repositories/dataRepository');
 
-// Отримання тільки головних категорій (де parentId === null)
+const toRequiredText = (value, fieldName) => {
+    const normalizedValue = String(value ?? '').trim();
+
+    if (!normalizedValue) {
+        throw new Error(`${fieldName} is required.`);
+    }
+
+    return normalizedValue;
+};
+
+const toRequiredInteger = (value, fieldName) => {
+    const normalizedValue = Number(value);
+
+    if (!Number.isInteger(normalizedValue)) {
+        throw new Error(`${fieldName} must be an integer.`);
+    }
+
+    return normalizedValue;
+};
+
+const toNullableInteger = (value, fieldName) => {
+    if (value === undefined || value === null || value === '') {
+        return null;
+    }
+
+    const normalizedValue = Number(value);
+
+    if (!Number.isInteger(normalizedValue)) {
+        throw new Error(`${fieldName} must be an integer.`);
+    }
+
+    return normalizedValue;
+};
+
+const toNonNegativeNumber = (value, fieldName) => {
+    const normalizedValue = Number(value);
+
+    if (!Number.isFinite(normalizedValue) || normalizedValue < 0) {
+        throw new Error(`${fieldName} must be a non-negative number.`);
+    }
+
+    return normalizedValue;
+};
+
 const getRootCategories = async () => {
-    try {
-        const categories = await dataRepo.getCategoriesPromise();
-        return categories.filter(c => c.parentId === null);
-    } catch (error) {
-        console.error("Помилка в сервісі категорій:", error);
-        return [];
-    }
+    return dataRepo.getRootCategories();
 };
 
-// Отримання підкатегорій для конкретної категорії
 const getSubcategories = async (parentId) => {
-    try {
-        const categories = await dataRepo.getCategoriesPromise();
-        return categories.filter(c => c.parentId === parseInt(parentId));
-    } catch (error) {
-        console.error("Помилка при отриманні підкатегорій:", error);
-        return [];
-    }
-};
-
-// Отримання категорії за її ID (використовуємо Синхронний метод)
-const getCategoryById = (categoryId) => {
-    const categories = dataRepo.getCategoriesSync();
-    return categories.find(c => c.id === parseInt(categoryId));
-};
-
-// Отримання всіх товарів (використовуємо метод Async/Await)
-const getAllProducts = async () => {
-    try {
-        const products = await dataRepo.getProductsAsync();
-        return products;
-    } catch (error) {
-        console.error("Помилка в сервісі товарів:", error);
-        return [];
-    }
-};
-
-// Отримання товарів конкретної категорії (використовуємо метод з Callback, обгорнутий у Promise для зручності)
-const getProductsByCategory = (categoryId) => {
-    return new Promise((resolve, reject) => {
-        dataRepo.getProductsCallback((err, products) => {
-            if (err) {
-                console.error("Помилка при фільтрації товарів:", err);
-                resolve([]); // Повертаємо пустий масив у разі помилки
-                return;
-            }
-            // Фільтруємо товари, залишаючи лише ті, що належать до потрібної категорії
-            const filteredProducts = products.filter(p => p.categoryId === parseInt(categoryId));
-            resolve(filteredProducts);
-        });
-    });
-};
-
-const createProduct = async (productData) => {
-    const products = await dataRepo.getProductsAsync();
-    const newProduct = {
-        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-        ...productData,
-        price: parseInt(productData.price),
-        categoryId: parseInt(productData.categoryId) // <--- ДОДАНО ПЕРЕТВОРЕННЯ В ЧИСЛО
-    };
-    products.push(newProduct);
-    await dataRepo.saveProductsAsync(products);
-    return newProduct;
-};
-
-const deleteProduct = async (productId) => {
-    let products = await dataRepo.getProductsAsync();
-    products = products.filter(p => p.id !== parseInt(productId));
-    return await dataRepo.saveProductsAsync(products);
+    return dataRepo.getSubcategories(toRequiredInteger(parentId, 'Parent category id'));
 };
 
 const getAllCategories = async () => {
-    try {
-        const categories = await dataRepo.getCategoriesPromise();
-        return categories;
-    } catch (error) {
-        console.error("Помилка при отриманні всіх категорій:", error);
-        return [];
-    }
+    return dataRepo.getAllCategories();
 };
 
-const searchProducts = async (searchQuery) => {
-    try {
-        if (!searchQuery) return []; // Якщо запит порожній, нічого не шукаємо
-        
-        const products = await dataRepo.getProductsAsync();
-        const lowerQuery = searchQuery.toLowerCase(); // Переводимо запит у нижній регістр для зручності
-        
-        // Фільтруємо товари, де назва або опис містять текст пошуку
-        return products.filter(p => 
-            p.name.toLowerCase().includes(lowerQuery) || 
-            p.description.toLowerCase().includes(lowerQuery)
-        );
-    } catch (error) {
-        console.error("Помилка при пошуку товарів:", error);
-        return [];
-    }
+const getCategoryById = async (categoryId) => {
+    return dataRepo.getCategoryById(toRequiredInteger(categoryId, 'Category id'));
 };
 
-// Оновлення існуючого товару
-const updateProduct = async (productId, updatedData) => {
-    const products = await dataRepo.getProductsAsync();
-    const index = products.findIndex(p => p.id === parseInt(productId));
-    if (index !== -1) {
-        products[index] = { 
-            ...products[index], 
-            ...updatedData,
-            price: parseInt(updatedData.price),
-            categoryId: parseInt(updatedData.categoryId)
-        };
-        await dataRepo.saveProductsAsync(products);
-    }
-};
-
-// Створення категорій
 const createCategory = async (categoryData) => {
-    const categories = await dataRepo.getCategoriesPromise();
-    const newCategory = {
-        id: categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1,
-        name: categoryData.name,
-        parentId: categoryData.parentId ? parseInt(categoryData.parentId) : null
-    };
-    categories.push(newCategory);
-    await dataRepo.saveCategoriesAsync(categories);
+    return dataRepo.createCategory({
+        name: toRequiredText(categoryData.name, 'Category name'),
+        parentId: toNullableInteger(categoryData.parentId, 'Parent category id')
+    });
+};
+
+const updateCategory = async (categoryId, categoryData) => {
+    const normalizedCategoryId = toRequiredInteger(categoryId, 'Category id');
+    const normalizedParentId = toNullableInteger(categoryData.parentId, 'Parent category id');
+
+    if (normalizedParentId === normalizedCategoryId) {
+        throw new Error('Category cannot be parent of itself.');
+    }
+
+    return dataRepo.updateCategory(normalizedCategoryId, {
+        name: toRequiredText(categoryData.name, 'Category name'),
+        parentId: normalizedParentId
+    });
 };
 
 const deleteCategory = async (categoryId) => {
-    let categories = await dataRepo.getCategoriesPromise();
-    // Видаляємо саму категорію
-    categories = categories.filter(c => c.id !== parseInt(categoryId));
-    await dataRepo.saveCategoriesAsync(categories);
+    return dataRepo.deleteCategory(toRequiredInteger(categoryId, 'Category id'));
 };
 
-const updateCategory = async (categoryId, updatedData) => {
-    try {
-        const categories = await dataRepo.getCategoriesPromise();
-        const index = categories.findIndex(c => c.id === parseInt(categoryId));
-        
-        if (index !== -1) {
-            categories[index] = { 
-                ...categories[index], 
-                name: updatedData.name,
-                // Якщо parentId порожній (головна категорія), ставимо null, інакше число
-                parentId: updatedData.parentId ? parseInt(updatedData.parentId) : null
-            };
-            await dataRepo.saveCategoriesAsync(categories);
-            return true;
-        }
-        return false;
-    } catch (error) {
-        console.error("Помилка при оновленні категорії:", error);
-        return false;
+const getAllProducts = async () => {
+    return dataRepo.getAllProducts();
+};
+
+const getProductById = async (productId) => {
+    return dataRepo.getProductById(toRequiredInteger(productId, 'Product id'));
+};
+
+const getProductsByCategory = async (categoryId) => {
+    return dataRepo.getProductsByCategory(toRequiredInteger(categoryId, 'Category id'));
+};
+
+const searchProducts = async (searchQuery) => {
+    const normalizedQuery = String(searchQuery ?? '').trim();
+
+    if (!normalizedQuery) {
+        return [];
     }
+
+    return dataRepo.searchProducts(normalizedQuery);
 };
 
-// Експортуємо функції сервісу
+const createProduct = async (productData) => {
+    return dataRepo.createProduct({
+        categoryId: toRequiredInteger(productData.categoryId, 'Category id'),
+        name: toRequiredText(productData.name, 'Product name'),
+        description: toRequiredText(productData.description, 'Product description'),
+        price: toNonNegativeNumber(productData.price, 'Product price'),
+        image: toRequiredText(productData.image, 'Product image')
+    });
+};
+
+const updateProduct = async (productId, productData) => {
+    return dataRepo.updateProduct(toRequiredInteger(productId, 'Product id'), {
+        categoryId: toRequiredInteger(productData.categoryId, 'Category id'),
+        name: toRequiredText(productData.name, 'Product name'),
+        description: toRequiredText(productData.description, 'Product description'),
+        price: toNonNegativeNumber(productData.price, 'Product price'),
+        image: toRequiredText(productData.image, 'Product image')
+    });
+};
+
+const deleteProduct = async (productId) => {
+    return dataRepo.deleteProduct(toRequiredInteger(productId, 'Product id'));
+};
+
+const createCategoryWithProduct = async (payload) => {
+    return dataRepo.createCategoryWithProduct({
+        categoryName: toRequiredText(payload.categoryName, 'Category name'),
+        parentId: toNullableInteger(payload.parentId, 'Parent category id'),
+        productName: toRequiredText(payload.productName, 'Product name'),
+        productDescription: toRequiredText(payload.productDescription, 'Product description'),
+        productPrice: toNonNegativeNumber(payload.productPrice, 'Product price'),
+        productImage: toRequiredText(payload.productImage, 'Product image'),
+        simulateError: payload.simulateError === 'true' || payload.simulateError === 'on'
+    });
+};
+
 module.exports = {
     getRootCategories,
     getSubcategories,
-    getCategoryById,
-    getAllProducts,
-    getProductsByCategory,
-    createProduct,
-    deleteProduct,
     getAllCategories,
-    searchProducts,
-    updateProduct,
+    getCategoryById,
     createCategory,
+    updateCategory,
     deleteCategory,
-    updateCategory
+    getAllProducts,
+    getProductById,
+    getProductsByCategory,
+    searchProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    createCategoryWithProduct
 };

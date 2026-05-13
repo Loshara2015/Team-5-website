@@ -1,83 +1,219 @@
-const fs = require('fs');
-const path = require('path');
+const { Op } = require('sequelize');
+const sequelize = require('../config/db');
+const { Category, Product } = require('../models');
 
-// Абсолютні шляхи до наших файлів з даними
-const categoriesPath = path.join(__dirname, '../data/categories.json');
-const productsPath = path.join(__dirname, '../data/products.json');
-
-// Синхронний підхід
-// Блокує потік виконання, поки файл не прочитається.
-const getCategoriesSync = () => {
-    try {
-        const data = fs.readFileSync(categoriesPath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Помилка синхронного читання категорій:', error);
-        return [];
-    }
+// Допоміжні функції для збереження старого формату даних, 
+// який очікують контролери та сервіси
+const mapCategory = (category) => {
+    if (!category) return null;
+    return {
+        id: category.id,
+        name: category.name,
+        parentId: category.parentId
+    };
 };
 
-// Асинхронний підхід з Callback
-// Функція приймає callback, який викликається після завершення.
-const getProductsCallback = (callback) => {
-    fs.readFile(productsPath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Помилка читання товарів (callback):', err);
-            callback(err, null);
-            return;
-        }
-        callback(null, JSON.parse(data));
+const mapProduct = (product) => {
+    if (!product) return null;
+    return {
+        id: product.id,
+        categoryId: product.categoryId,
+        name: product.name,
+        price: Number(product.price),
+        description: product.description,
+        image: product.image
+    };
+};
+
+const getRootCategories = async () => {
+    const categories = await Category.findAll({
+        where: { parentId: null },
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
+};
+
+const getSubcategories = async (parentId) => {
+    const categories = await Category.findAll({
+        where: { parentId },
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
+};
+
+const getAllCategories = async () => {
+    const categories = await Category.findAll({
+        order: [['id', 'ASC']]
+    });
+    return categories.map(mapCategory);
+};
+
+const getCategoryById = async (categoryId) => {
+    const category = await Category.findByPk(categoryId);
+    return mapCategory(category);
+};
+
+const createCategory = async (categoryData) => {
+    return sequelize.transaction(async (t) => {
+        const category = await Category.create({
+            name: categoryData.name,
+            parentId: categoryData.parentId
+        }, { transaction: t });
+        
+        return mapCategory(category);
     });
 };
 
-// Асинхронний підхід з Promise
-// Ланцюжки .then() та .catch() для обробки результату або помилки.
-const getCategoriesPromise = () => {
-    return fs.promises.readFile(categoriesPath, 'utf8')
-        .then(data => JSON.parse(data))
-        .catch(error => {
-            console.error('Помилка читання категорій (Promise):', error);
-            return [];
-        });
+const updateCategory = async (categoryId, categoryData) => {
+    return sequelize.transaction(async (t) => {
+        const category = await Category.findByPk(categoryId, { transaction: t });
+        if (!category) return null;
+
+        await category.update({
+            name: categoryData.name,
+            parentId: categoryData.parentId
+        }, { transaction: t });
+
+        return mapCategory(category);
+    });
 };
 
-// Асинхронний підхід з Async/Await
-const getProductsAsync = async () => {
-    try {
-        const data = await fs.promises.readFile(productsPath, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Помилка читання товарів (async/await):', error);
-        return [];
-    }
+const deleteCategory = async (categoryId) => {
+    return sequelize.transaction(async (t) => {
+        // Перевіряємо чи є підкатегорії або товари (як у старому коді)
+        const childCount = await Category.count({ where: { parentId: categoryId }, transaction: t });
+        const productCount = await Product.count({ where: { categoryId: categoryId }, transaction: t });
+
+        if (childCount > 0 || productCount > 0) {
+            throw new Error('Category contains subcategories or products.');
+        }
+
+        const category = await Category.findByPk(categoryId, { transaction: t });
+        if (category) {
+            await category.destroy({ transaction: t });
+        }
+        
+        return mapCategory(category);
+    });
 };
 
-const saveProductsAsync = async (products) => {
-    try {
-        await fs.promises.writeFile(productsPath, JSON.stringify(products, null, 2), 'utf8');
-        return true;
-    } catch (error) {
-        console.error('Помилка збереження товарів:', error);
-        return false;
-    }
+const getAllProducts = async () => {
+    const products = await Product.findAll({
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
 };
 
-const saveCategoriesAsync = async (categories) => {
-    try {
-        await fs.promises.writeFile(categoriesPath, JSON.stringify(categories, null, 2), 'utf8');
-        return true;
-    } catch (error) {
-        console.error('Помилка збереження категорій:', error);
-        return false;
-    }
+const getProductById = async (productId) => {
+    const product = await Product.findByPk(productId);
+    return mapProduct(product);
 };
 
-// Експортуємо всі методи, щоб їх могли використовувати сервіси
+const getProductsByCategory = async (categoryId) => {
+    const products = await Product.findAll({
+        where: { categoryId },
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
+};
+
+const searchProducts = async (searchQuery) => {
+    const pattern = `%${searchQuery}%`;
+    const products = await Product.findAll({
+        where: {
+            [Op.or]: [
+                { name: { [Op.iLike]: pattern } },
+                { description: { [Op.iLike]: pattern } }
+            ]
+        },
+        order: [['id', 'ASC']]
+    });
+    return products.map(mapProduct);
+};
+
+const createProduct = async (productData) => {
+    return sequelize.transaction(async (t) => {
+        const product = await Product.create({
+            categoryId: productData.categoryId,
+            name: productData.name,
+            description: productData.description,
+            price: productData.price,
+            image: productData.image
+        }, { transaction: t });
+
+        return mapProduct(product);
+    });
+};
+
+const updateProduct = async (productId, productData) => {
+    return sequelize.transaction(async (t) => {
+        const product = await Product.findByPk(productId, { transaction: t });
+        if (!product) return null;
+
+        await product.update({
+            categoryId: productData.categoryId,
+            name: productData.name,
+            description: productData.description,
+            price: productData.price,
+            image: productData.image
+        }, { transaction: t });
+
+        return mapProduct(product);
+    });
+};
+
+const deleteProduct = async (productId) => {
+    return sequelize.transaction(async (t) => {
+        const product = await Product.findByPk(productId, { transaction: t });
+        if (product) {
+            await product.destroy({ transaction: t });
+        }
+        return mapProduct(product);
+    });
+};
+
+// Бізнес-операція для демонстрації транзакції (ROLLBACK)
+const createCategoryWithProduct = async (payload) => {
+    return sequelize.transaction(async (t) => {
+        // Крок 1: Створюємо категорію
+        const category = await Category.create({
+            name: payload.categoryName,
+            parentId: payload.parentId
+        }, { transaction: t });
+
+        // Якщо увімкнена симуляція помилки, ставимо ціну -1 (це порушить обмеження моделі)
+        const priceToSave = payload.simulateError ? -1 : payload.productPrice;
+
+        // Крок 2: Створюємо товар. Якщо тут буде помилка, категорія теж не збережеться.
+        const product = await Product.create({
+            categoryId: category.id,
+            name: payload.productName,
+            description: payload.productDescription,
+            price: priceToSave,
+            image: payload.productImage
+        }, { transaction: t });
+
+        return {
+            category: mapCategory(category),
+            product: mapProduct(product)
+        };
+    });
+};
+
 module.exports = {
-    getCategoriesSync,
-    getProductsCallback,
-    getCategoriesPromise,
-    getProductsAsync,
-    saveProductsAsync,
-    saveCategoriesAsync
+    getRootCategories,
+    getSubcategories,
+    getAllCategories,
+    getCategoryById,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getAllProducts,
+    getProductById,
+    getProductsByCategory,
+    searchProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    createCategoryWithProduct
 };

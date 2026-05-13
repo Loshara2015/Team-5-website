@@ -16,12 +16,16 @@
         "test": "test"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node server.js",
+        "seed": "node scripts/seed.js"
     },
     "license": "ISC",
     "type": "commonjs",
     "dependencies": {
+        "dotenv": "^17.4.2",
         "ejs": "^4.0.1",
-        "express": "^5.2.1"
+        "express": "^5.2.1",
+        "pg": "^8.20.0",
+        "sequelize": "^6.37.8"
     }
 }
